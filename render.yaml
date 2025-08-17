@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: n8n-service
+    env: docker
+    plan: free
+    image: docker.io/n8nio/n8n:latest
+    envVars:
+      - key: WEBHOOK_TUNNEL_URL
+        value: https://twoja-domena.onrender.com
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        fromSecret: N8N_USER
+      - key: N8N_BASIC_AUTH_PASSWORD
+        fromSecret: N8N_PASSWORD
+      - key: DB_TYPE
+        value: postgres
+      - key: DB_POSTGRESDB_HOST
+        value: n8n-db.internal
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+      - key: DB_POSTGRESDB_DATABASE
+        value: n8n
+      - key: DB_POSTGRESDB_USER
+        value: render
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          property: userPassword
+    disks:
+      - name: n8n-data
+        mountPath: /home/node/.n8n
+
+databases:
+  - name: n8n-db
+    engine: postgres
+    version: "13"
+    plan: free
+
+disks:
+  - name: n8n-data
+    sizeGB: 1
+    plan: free
