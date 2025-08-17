@@ -4,6 +4,8 @@ services:
     env: docker
     plan: free
     image: docker.io/n8nio/n8n:latest
+    autoDeploy: true
+    healthCheckPath: /rest/health
     envVars:
       - key: N8N_BASIC_AUTH_ACTIVE
         value: "true"
@@ -11,6 +13,8 @@ services:
         fromSecret: N8N_USER
       - key: N8N_BASIC_AUTH_PASSWORD
         fromSecret: N8N_PASSWORD
+      - key: N8N_LOCALE
+        value: pl
       - key: WEBHOOK_TUNNEL_URL
         value: https://my-hrm-n8n.onrender.com
       - key: DB_TYPE
@@ -34,3 +38,4 @@ databases:
     databaseName: n8n
     user: ${DB_USER}
     password: ${DB_PASSWORD}
+
